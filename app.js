@@ -18,6 +18,9 @@ class PizzaApp {
     this.setupEventListeners();
     this.setupCartUpdates();
     
+    // Carrega cards estáticos do HTML primeiro
+    this.loadStaticCards();
+    
     // Tenta carregar menu do backend, mas não falha se não houver backend
     try {
       await this.renderMenu();
@@ -35,6 +38,41 @@ class PizzaApp {
     }
     
     console.log('PizzaApp inicializado com sucesso!');
+  }
+
+  /**
+   * Carrega os cards estáticos do HTML e adiciona ao array de pizzas
+   */
+  loadStaticCards() {
+    const cards = document.querySelectorAll('.cards .card[data-pizza-name]');
+    cards.forEach((card, index) => {
+      const name = card.dataset.pizzaName;
+      const priceText = card.querySelector('.price')?.textContent;
+      const description = card.querySelector('.card-body p')?.textContent || '';
+      const image = card.querySelector('.card-img')?.src || '';
+      
+      if (priceText) {
+        const price = parseFloat(priceText.replace('R$', '').replace(',', '.').trim());
+        
+        // Verifica se a pizza já existe no array (evita duplicatas)
+        const exists = this.pizzas.find(p => p.name === name);
+        if (!exists) {
+          this.pizzas.push({
+            id: `static-${index + 1}`,
+            name: name,
+            description: description,
+            price: price,
+            image: image
+          });
+        }
+      }
+    });
+    
+    if (this.pizzas.length > 0) {
+      console.log(`${this.pizzas.length} pizza(s) estática(s) carregada(s) do HTML`);
+      // Atualiza o select do formulário
+      this.updateOrderFormSelect();
+    }
   }
 
   /**
@@ -197,15 +235,26 @@ class PizzaApp {
     const menuContainer = document.querySelector('.cards');
     if (!menuContainer) return;
 
+    // Verifica se já existem cards estáticos no HTML
+    const existingCards = menuContainer.querySelectorAll('.card');
+    const hasStaticCards = existingCards.length > 0;
+
     this.showLoading(true);
     try {
       this.pizzas = await this.apiService.getPizzas();
       
       if (!this.pizzas || this.pizzas.length === 0) {
+        // Se não há pizzas do backend mas há cards estáticos, mantém os estáticos
+        if (hasStaticCards) {
+          console.log('Backend não retornou pizzas, mantendo cards estáticos');
+          return;
+        }
+        // Só mostra mensagem se não houver cards estáticos
         menuContainer.innerHTML = '<p>Nenhuma pizza disponível no momento.</p>';
         return;
       }
 
+      // Se chegou aqui, o backend retornou dados - substitui os cards
       menuContainer.innerHTML = this.pizzas.map(pizza => `
         <article class="card" data-pizza-id="${pizza.id}">
           <img 
@@ -227,6 +276,13 @@ class PizzaApp {
       // Atualiza o select do formulário com as pizzas disponíveis
       this.updateOrderFormSelect();
     } catch (error) {
+      // Se houver erro mas existirem cards estáticos, mantém os estáticos
+      if (hasStaticCards) {
+        console.log('Erro ao carregar menu do backend, mantendo cards estáticos:', error.message);
+        // Não mostra notificação de erro se há cards estáticos funcionando
+        return;
+      }
+      // Só mostra erro se não houver cards estáticos
       this.showNotification(`Erro ao carregar menu: ${error.message}`, 'error');
       menuContainer.innerHTML = '<p>Erro ao carregar o cardápio. Tente novamente mais tarde.</p>';
     } finally {
