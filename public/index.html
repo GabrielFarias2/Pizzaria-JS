@@ -1,0 +1,315 @@
+<!-- ...existing code... -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pizzaria — Faça seu pedido</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <div class="logo">
+          <span class="mark">🍕</span>
+          <h1>Pizzaria Deliver's</h1>
+        </div>
+        <nav class="nav">
+          <a href="#menu">Cardápio</a>
+          <a href="#pedido">Pedir</a>
+          <a href="#historico">Histórico</a>
+          <a href="#contato">Contato</a>
+        </nav>
+        <div class="header-actions">
+          <button class="cart-icon" aria-label="Carrinho de compras">
+            🛒
+            <span class="cart-badge" style="display: none">0</span>
+          </button>
+          <button
+            class="btn btn-primary mobile-order"
+            aria-label="Fazer pedido"
+          >
+            Pedir
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-content">
+          <div>
+            <h2>Sabor artesanal. Entrega rápida.</h2>
+            <p>
+              Massas frescas, ingredientes selecionados e combinações
+              irresistíveis. Peça agora!
+            </p>
+            <a href="#pedido" class="btn btn-cta">Faça seu pedido</a>
+          </div>
+          <img
+            src="images/pizza-recem-assada-na-mesa-de-madeira-rustica-gerada-por-ia.jpg"
+            alt="Pizza artesanal"
+            class="hero-image"
+          />
+        </div>
+      </section>
+
+      <section id="menu" class="container section menu-section">
+        <h3>Cardápio popular</h3>
+        <div class="cards">
+          <article class="card" data-pizza-name="Margherita">
+            <img
+              src="images/uma-deliciosa-pizza-margarita-com-manjericao-fresco.jpg"
+              alt="Pizza Margherita"
+              class="card-img"
+            />
+            <div class="card-body">
+              <h4>Margherita</h4>
+              <p>Tomate, mussarela, manjericão e azeite.</p>
+              <div class="card-footer">
+                <span class="price">R$ 28,90</span>
+                <button class="btn btn-sm btn-add-to-cart">Adicionar</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-pizza-name="Pepperoni">
+            <img
+              src="images/mussarela-derretendo-em-cima-de-pizza-gourmet-recem-assada-gerada-por-ia.jpg"
+              alt="Pizza Pepperoni"
+              class="card-img"
+            />
+            <div class="card-body">
+              <h4>Pepperoni</h4>
+              <p>Pepperoni crocante com queijo extra.</p>
+              <div class="card-footer">
+                <span class="price">R$ 34,50</span>
+                <button class="btn btn-sm btn-add-to-cart">Adicionar</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-pizza-name="Quatro Queijos">
+            <img
+              src="images/uma-apresentacao-epica-de-comida-deliciosa.jpg"
+              alt="Pizza Quatro Queijos"
+              class="card-img"
+            />
+            <div class="card-body">
+              <h4>Quatro Queijos</h4>
+              <p>Mussarela, provolone, gorgonzola e parmesão.</p>
+              <div class="card-footer">
+                <span class="price">R$ 36,00</span>
+                <button class="btn btn-sm btn-add-to-cart">Adicionar</button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="pedido" class="container section order-section">
+        <h3>Faça seu pedido</h3>
+        <form
+          class="order-form"
+          action="#"
+          method="post"
+          aria-label="Formulário de pedido"
+        >
+          <div class="form-row">
+            <label for="sabor">Sabor</label>
+            <select id="sabor" name="sabor" required>
+              <option value="">Escolha o sabor</option>
+              <option>Margherita</option>
+              <option>Pepperoni</option>
+              <option>Quatro Queijos</option>
+              <option>Calabresa</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="tamanho">Tamanho</label>
+            <select id="tamanho" name="tamanho" required>
+              <option value="">Escolha o tamanho</option>
+              <option>Pequena</option>
+              <option>Média</option>
+              <option>Grande</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="quantidade">Quantidade</label>
+            <input
+              id="quantidade"
+              name="quantidade"
+              type="number"
+              min="1"
+              value="1"
+            />
+          </div>
+
+          <div class="form-row">
+            <label for="observacoes">Observações</label>
+            <input
+              id="observacoes"
+              name="observacoes"
+              type="text"
+              placeholder="Ex: sem cebola, extra queijo..."
+            />
+          </div>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">
+              Confirmar pedido
+            </button>
+            <button class="btn btn-outline" type="reset">Limpar</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="rastreamento" class="container section tracking-section">
+        <h3>Rastrear pedido</h3>
+        <div class="order-tracking-container">
+          <form class="track-order-form">
+            <input
+              type="text"
+              id="order-id-input"
+              placeholder="Digite o ID do pedido"
+            />
+            <button type="button" class="btn btn-primary" id="track-order-btn">
+              Rastrear
+            </button>
+          </form>
+          <div class="order-status-container"></div>
+        </div>
+      </section>
+
+      <section id="historico" class="container section history-section">
+        <h3>Histórico de pedidos</h3>
+        <div class="order-history-container">
+          <p>Carregando histórico...</p>
+        </div>
+      </section>
+
+      <section id="contato" class="container section contact-section">
+        <h3>Contato e entrega</h3>
+        <p>
+          Atendemos de terça a domingo — entrega em até 45 minutos na sua
+          região.
+        </p>
+        <ul class="contact-list">
+          <li>Telefone: (11) 99999-9999</li>
+          <li>Endereço: Rua Exemplo, 123</li>
+          <li>Horário: 18:00 - 23:30</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>© <span id="year"></span> Pizzaria Deliver's — Feito com sabor</p>
+        <p class="credits">
+          Siga-nos: <a href="#">Instagram</a> · <a href="#">Facebook</a>
+        </p>
+      </div>
+    </footer>
+
+    <!-- Modal do Carrinho -->
+    <div class="cart-modal">
+      <div class="cart-modal-content">
+        <div class="cart-modal-header">
+          <h3>Carrinho</h3>
+          <button class="cart-close" aria-label="Fechar carrinho">×</button>
+        </div>
+        <div class="cart-items"></div>
+        <div class="cart-modal-footer">
+          <div class="cart-total-section">
+            <strong>Total: <span class="cart-total">R$ 0,00</span></strong>
+          </div>
+          <button class="btn btn-primary cart-checkout">
+            Finalizar pedido
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts das classes -->
+    <script src="../api.js"></script>
+    <script src="../cart.js"></script>
+    <script src="../orders.js"></script>
+    <script src="../app.js"></script>
+
+    <script>
+      // Atualiza ano no rodapé
+      document.getElementById("year").textContent = new Date().getFullYear();
+
+      // Inicializa a aplicação
+      const app = new PizzaApp();
+      app.init();
+
+      // Rastreamento de pedido
+      const trackOrderBtn = document.getElementById("track-order-btn");
+      const orderIdInput = document.getElementById("order-id-input");
+      const orderStatusContainer = document.querySelector(
+        ".order-status-container"
+      );
+
+      if (trackOrderBtn && orderIdInput) {
+        trackOrderBtn.addEventListener("click", async () => {
+          const orderId = orderIdInput.value.trim();
+          if (!orderId) {
+            app.showNotification("Por favor, digite o ID do pedido.", "error");
+            return;
+          }
+
+          app.showLoading(true);
+          try {
+            const order = await app.orderManager.trackOrder(orderId);
+            app.orderManager.displayOrderStatus(order, orderStatusContainer);
+
+            // Inicia polling se o pedido não estiver finalizado
+            if (order.status !== "delivered" && order.status !== "cancelled") {
+              app.orderManager.startOrderPolling(orderId, (updatedOrder) => {
+                app.orderManager.displayOrderStatus(
+                  updatedOrder,
+                  orderStatusContainer
+                );
+              });
+            }
+          } catch (error) {
+            app.showNotification(
+              `Erro ao rastrear pedido: ${error.message}`,
+              "error"
+            );
+            orderStatusContainer.innerHTML = "<p>Pedido não encontrado.</p>";
+          } finally {
+            app.showLoading(false);
+          }
+        });
+
+        // Permite rastrear com Enter
+        orderIdInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            trackOrderBtn.click();
+          }
+        });
+      }
+
+      // Carrega histórico ao clicar no link
+      const historyLink = document.querySelector('a[href="#historico"]');
+      if (historyLink) {
+        historyLink.addEventListener("click", async (e) => {
+          e.preventDefault();
+          await app.loadOrderHistory();
+          document
+            .querySelector("#historico")
+            .scrollIntoView({ behavior: "smooth" });
+        });
+      }
+    </script>
+  </body>
+</html>
+<!-- ...existing code... -->
