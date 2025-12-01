@@ -236,6 +236,53 @@
       </div>
     </div>
 
+    <!-- Add modal (colocar antes do Modal do Carrinho ou antes do fechamento do body) -->
+    <div id="add-modal" class="add-modal" aria-hidden="true">
+      <div
+        class="add-modal-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="add-modal-title"
+      >
+        <div class="add-modal-header">
+          <h3 id="add-modal-title">Adicionar ao carrinho</h3>
+          <button class="add-modal-close" aria-label="Fechar">×</button>
+        </div>
+        <div class="add-modal-body">
+          <p class="add-modal-pizza-name"></p>
+          <p class="add-modal-pizza-desc"></p>
+
+          <div class="add-row">
+            <label for="add-size">Tamanho</label>
+            <select id="add-size">
+              <option value="Pequena">Pequena</option>
+              <option value="Média" selected>Média</option>
+              <option value="Grande">Grande</option>
+            </select>
+          </div>
+
+          <div class="add-row">
+            <label for="add-quantity">Quantidade</label>
+            <input id="add-quantity" type="number" min="1" value="1" />
+          </div>
+
+          <div class="add-row">
+            <label for="add-obs">Observações</label>
+            <input
+              id="add-obs"
+              type="text"
+              placeholder="Ex: sem cebola, extra queijo..."
+            />
+          </div>
+        </div>
+
+        <div class="add-modal-footer">
+          <button class="btn btn-outline add-cancel">Cancelar</button>
+          <button class="btn btn-primary add-confirm">Adicionar</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Scripts das classes -->
     <script src="../api.js"></script>
     <script src="../cart.js"></script>
@@ -270,7 +317,6 @@
             const order = await app.orderManager.trackOrder(orderId);
             app.orderManager.displayOrderStatus(order, orderStatusContainer);
 
-            // Inicia polling se o pedido não estiver finalizado
             if (order.status !== "delivered" && order.status !== "cancelled") {
               app.orderManager.startOrderPolling(orderId, (updatedOrder) => {
                 app.orderManager.displayOrderStatus(
@@ -290,7 +336,6 @@
           }
         });
 
-        // Permite rastrear com Enter
         orderIdInput.addEventListener("keypress", (e) => {
           if (e.key === "Enter") {
             trackOrderBtn.click();
@@ -298,7 +343,6 @@
         });
       }
 
-      // Carrega histórico ao clicar no link
       const historyLink = document.querySelector('a[href="#historico"]');
       if (historyLink) {
         historyLink.addEventListener("click", async (e) => {

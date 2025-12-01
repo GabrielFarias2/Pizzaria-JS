@@ -898,6 +898,167 @@ body {
 }
 
 /* ============================================
+   ADD TO CART MODAL
+   ============================================ */
+
+.add-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.add-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.add-modal-content {
+  background: var(--white);
+  border-radius: var(--border-radius-lg);
+  width: 90%;
+  max-width: 500px;
+  box-shadow: var(--shadow-lg);
+  border: 3px solid var(--red);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.add-modal.active .add-modal-content {
+  transform: scale(1);
+}
+
+.add-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-lg);
+  border-bottom: 2px solid var(--red);
+  background: var(--black-dark);
+  flex-shrink: 0;
+}
+
+.add-modal-header h3 {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  color: var(--white);
+  font-weight: 700;
+}
+
+.add-modal-close {
+  background: transparent;
+  border: 2px solid var(--white);
+  color: var(--white);
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+  transition: all 0.3s ease;
+  line-height: 1;
+  padding: 0;
+  font-weight: 700;
+}
+
+.add-modal-close:hover {
+  background: var(--red);
+  border-color: var(--red);
+}
+
+.add-modal-body {
+  padding: var(--spacing-lg);
+  color: var(--black);
+}
+
+.add-modal-pizza-name {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--black);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.add-modal-pizza-desc {
+  font-size: var(--font-size-base);
+  color: var(--gray-dark);
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+.add-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-md);
+}
+
+.add-row label {
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  color: var(--black);
+}
+
+.add-row input,
+.add-row select {
+  padding: var(--spacing-sm);
+  border: 2px solid var(--gray-light);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  font-family: var(--font-family);
+  background: var(--white);
+  color: var(--black);
+  transition: border-color 0.3s ease;
+}
+
+.add-row input:focus,
+.add-row select:focus {
+  outline: none;
+  border-color: var(--red);
+}
+
+.add-modal-footer {
+  padding: var(--spacing-lg);
+  border-top: 2px solid var(--red);
+  background: var(--black-dark);
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.add-modal .btn-outline {
+  background: transparent;
+  color: var(--white);
+  border: 2px solid var(--white);
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.add-modal .btn-outline:hover {
+  background: var(--white);
+  color: var(--black);
+}
+
+.add-modal .btn-primary {
+  background: var(--red);
+  color: var(--white);
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.add-modal .btn-primary:hover {
+  background: var(--red-dark);
+}
+
+/* ============================================
    LOADING SPINNER
    ============================================ */
 
