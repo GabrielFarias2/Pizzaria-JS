@@ -79,7 +79,18 @@ class ApiService {
    */
 
   async cancelOrder(id) {
-    return await this.request(`/ordes/${id}`, {
+    return await this.request(`/orders/${id}/cancel`, {
+      method: "PATCH",
+    });
+  }
+
+  /**
+   * Deleta um pedido (Remove do banco)
+   * @param {string|number} id - ID do pedido
+   * @returns {Promise<object>} - Resultado da operação
+   */
+  async deleteOrder(id) {
+    return await this.request(`/orders/${id}`, {
       method: "DELETE",
     });
   }

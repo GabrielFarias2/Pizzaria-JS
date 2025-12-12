@@ -19,6 +19,7 @@ class PizzaApp {
     this.setupEventListeners();
     this.setupCartUpdates();
     this.setupAddModal(); // NOVO: inicializa modal de adicionar
+    this.orderManager.setupCancelModal(); // Inicializa modal de cancelar
 
     // Carrega cards estáticos do HTML primeiro
     this.loadStaticCards();
@@ -197,31 +198,7 @@ class PizzaApp {
       const historyContainer = document.querySelector(
         ".order-history-container"
       );
-      if (historyContainer) {
-        historyContainer.addEventListener("click", async (e) => {
-          if (e.target.classList.contains("btn-delete")) {
-            e.stopPropagation(); // Evita abrir o detalhe do pedido se houver clique no card
-
-            const orderId = e.target.dataset.id;
-
-            // Confirmação (Simples)
-            if (!confirm("Tem certeza que deseja cancelar este pedido?")) {
-              return;
-            }
-
-            this.showLoading(true);
-            try {
-              await this.apiService.cancelOrder(orderId);
-              this.showNotification("Pedido cancelado com sucesso!", "success");
-              await this.loadOrderHistory(); // Recarrega a lista
-            } catch (error) {
-              this.showNotification(`Erro: ${error.message}`, "error");
-            } finally {
-              this.showLoading(false);
-            }
-          }
-        });
-      }
+      // Listener removal: Delegation for btn-delete is now handled by OrderManager directly
     }
 
     // Botões "Adicionar ao carrinho" nos cards do menu

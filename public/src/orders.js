@@ -165,6 +165,7 @@ class OrderManager {
               ? order.items.reduce((sum, item) => sum + item.quantity, 0)
               : 0;
             const isPending = order.status === "pending";
+            const isCancelled = order.status === "cancelled";
 
             return `
             <div class="order-history-item" data-order-id="${order.id}">
@@ -173,7 +174,14 @@ class OrderManager {
                   <h4>Pedido #${order.id}</h4>
                   <p class="order-history-date">${formattedDate}</p>
                 </div>
-                <span class="order-status ${status.class}">${status.text}</span>
+                <div class="order-status-wrapper">
+                    <span class="order-status ${status.class}">${status.text}</span>
+                    ${
+                        isCancelled
+                        ? `<button class="btn-remove-order" data-action="remove" data-id="${order.id}" title="Remover do histórico">×</button>`
+                        : ''
+                    }
+                </div>
               </div>
               <div class="order-history-info">
                 <p>${itemCount} item(ns) • Total: R$ ${(
@@ -197,50 +205,125 @@ class OrderManager {
       </div>
     `;
 
-    // Adiciona event listeners aos botões de cancelar
-    this.attachCancelEventListeners(container);
+    // Adiciona event listeners aos botões
+    this.attachEventListeners(container);
   }
 
   /**
-   * Adiciona event listeners aos botões de cancelar
+   * Adiciona event listeners aos botões de cancelar e remover
    * @param {HTMLElement} container - Container com os botões
    */
-  attachCancelEventListeners(container) {
+  attachEventListeners(container) {
+    // Cancel buttons
     const cancelButtons = container.querySelectorAll('[data-action="cancel"]');
-
     cancelButtons.forEach((button) => {
-      button.addEventListener("click", async (e) => {
+      button.addEventListener("click", (e) => {
         const orderId = e.target.dataset.id;
-
-        // Confirmação do usuário
-        if (!confirm(`Deseja realmente cancelar o pedido #${orderId}?`)) {
-          return;
-        }
-
-        try {
-          // Desabilita o botão durante o processamento
-          button.disabled = true;
-          button.textContent = "Cancelando...";
-
-          // Cancela o pedido
-          await this.cancelOrder(orderId);
-
-          // Atualiza a lista de pedidos
-          const orders = await this.getOrderHistory();
-          this.displayOrderHistory(orders, container);
-
-          // Feedback de sucesso
-          alert(`Pedido #${orderId} cancelado com sucesso!`);
-        } catch (error) {
-          console.error("Erro ao cancelar pedido:", error);
-          alert(`Erro ao cancelar pedido: ${error.message}`);
-
-          // Reabilita o botão em caso de erro
-          button.disabled = false;
-          button.textContent = "Cancelar Pedido";
-        }
+        this.openCancelModal(orderId);
       });
     });
+
+    // Remove buttons (X)
+    const removeButtons = container.querySelectorAll('[data-action="remove"]');
+    removeButtons.forEach((button) => {
+        button.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            const orderId = e.target.dataset.id;
+            try {
+                await this.apiService.deleteOrder(orderId);
+                // Remove element from DOM visual effect
+                const item = button.closest('.order-history-item');
+                if(item) {
+                    item.style.transition = 'all 0.3s ease';
+                    item.style.opacity = '0';
+                    item.style.transform = 'scale(0.9)';
+                    setTimeout(() => item.remove(), 300);
+                }
+                // Optional: Recalculate history if empty
+                const remaining = container.querySelectorAll('.order-history-item').length - 1;
+                if (remaining <= 0) {
+                     setTimeout(() => this.getOrderHistory().then(orders => this.displayOrderHistory(orders, container)), 300);
+                }
+            } catch (error) {
+                console.error("Erro ao remover pedido:", error);
+                alert(`Erro ao remover pedido: ${error.message}`);
+            }
+        });
+    });
+  }
+
+  setupCancelModal() {
+      const modal = document.getElementById('cancel-modal');
+      const yesBtn = document.getElementById('cancel-modal-yes');
+      const noBtn = document.getElementById('cancel-modal-no');
+      const idDisplay = document.getElementById('cancel-order-id-display');
+
+      if (!modal || !yesBtn || !noBtn) return;
+
+      this.cancelModalElements = { modal, yesBtn, noBtn, idDisplay };
+
+      const closeModal = () => {
+          modal.classList.remove('active');
+          modal.setAttribute('aria-hidden', 'true');
+          this.orderToCancel = null;
+      };
+
+      noBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+          if(e.target === modal) closeModal();
+      });
+
+      yesBtn.addEventListener('click', async () => {
+          if (!this.orderToCancel) return;
+
+          const orderId = this.orderToCancel;
+          yesBtn.disabled = true;
+          yesBtn.textContent = 'Cancelando...';
+
+          try {
+              await this.cancelOrder(orderId);
+              
+              // Refresh history
+              const historyContainer = document.querySelector('.order-history-container');
+              if (historyContainer) {
+                  const orders = await this.getOrderHistory();
+                  this.displayOrderHistory(orders, historyContainer);
+              }
+              
+              closeModal();
+              // Show notification if app is global or use alert
+              // Ideally communicate back to app, but alert is fine for now as requested by user effectively
+              // User asked for modal instead of alert.
+              // We can use a custom toast if available, but I'll stick to non-alert success feedback if possible, 
+              // but standard success is often just UI update.
+              // I'll show a simple alert or reuse the notification system if I can access it.
+              // Since OrderManager doesn't have access to PizzaApp directly, I'll rely on UI update.
+              
+          } catch (error) {
+              console.error("Erro ao cancelar:", error);
+              alert(`Erro: ${error.message}`);
+          } finally {
+              yesBtn.disabled = false;
+              yesBtn.textContent = 'Sim, cancelar';
+          }
+      });
+  }
+
+  openCancelModal(orderId) {
+      if (!this.cancelModalElements) {
+          // Fallback if setup wasn't called
+          if(confirm(`Deseja cancelar o pedido #${orderId}?`)) {
+              this.cancelOrder(orderId).then(() => {
+                  window.location.reload(); // Simple fallback
+              });
+          }
+          return;
+      }
+      
+      this.orderToCancel = orderId;
+      this.cancelModalElements.idDisplay.textContent = `Pedido #${orderId}`;
+      this.cancelModalElements.modal.classList.add('active');
+      this.cancelModalElements.modal.setAttribute('aria-hidden', 'false');
   }
 
   /**

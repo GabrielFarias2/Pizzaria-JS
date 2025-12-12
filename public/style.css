@@ -1279,3 +1279,140 @@ body {
   color: var(--white);
   box-shadow: 0 2px 5px rgba(220, 38, 38, 0.4);
 }
+
+/* ============================================
+   CANCEL MODAL
+   ============================================ */
+
+.cancel-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.cancel-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cancel-modal-content {
+  background: var(--white);
+  border-radius: var(--border-radius-lg);
+  width: 90%;
+  max-width: 400px;
+  box-shadow: var(--shadow-lg);
+  border: 3px solid var(--red);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.cancel-modal.active .cancel-modal-content {
+  transform: scale(1);
+}
+
+.cancel-modal-header {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--black-dark);
+  border-bottom: 2px solid var(--red);
+  display: flex;
+  justify-content: center;
+}
+
+.cancel-modal-header h3 {
+  margin: 0;
+  color: var(--white);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.cancel-modal-body {
+  padding: var(--spacing-lg);
+  text-align: center;
+  color: var(--black);
+}
+
+.cancel-modal-body p {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-xs);
+  font-weight: 600;
+}
+
+.cancel-modal-body span {
+  color: var(--gray-dark);
+  font-size: var(--font-size-base);
+}
+
+.cancel-modal-footer {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--gray-light);
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+.cancel-modal .btn-confirm {
+  background: var(--red);
+  color: var(--white);
+}
+
+.cancel-modal .btn-confirm:hover {
+  background: var(--red-dark);
+}
+
+.cancel-modal .btn-cancel {
+  background: transparent;
+  border: 2px solid var(--gray-dark);
+  color: var(--black); /* Fixed visibility on gray-light bg */
+}
+
+.cancel-modal .btn-cancel:hover {
+  background: var(--gray-dark);
+  color: var(--white);
+}
+
+/* ============================================
+   REMOVE ORDER BUTTON (X)
+   ============================================ */
+
+.btn-remove-order {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--red);
+  color: var(--white);
+  border: none;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 8px;
+  line-height: 1;
+}
+
+.btn-remove-order:hover {
+  background: var(--red-dark);
+  transform: scale(1.1);
+}
+
+.order-history-header {
+  position: relative;
+}
+
+.order-status-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
