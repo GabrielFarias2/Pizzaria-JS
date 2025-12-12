@@ -72,4 +72,15 @@ class ApiService {
   async getOrderHistory() {
     return await this.request("/orders");
   }
+  /**
+   * Cancela um pedido
+   * @param {string|number} id - ID do pedido
+   * @returns {Promise<object>} - Resultado da operação
+   */
+
+  async cancelOrder(id) {
+    return await this.request(`/ordes/${id}`, {
+      method: "DELETE",
+    });
+  }
 }

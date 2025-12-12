@@ -1265,3 +1265,17 @@ body {
     padding: var(--spacing-md);
   }
 }
+ .btn-delete {
+  background-color: transparent;
+  border: 1px solid var(--red);
+  color: var(--red);
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+  background-color: var(--red);
+  color: var(--white);
+  box-shadow: 0 2px 5px rgba(220, 38, 38, 0.4);
+}

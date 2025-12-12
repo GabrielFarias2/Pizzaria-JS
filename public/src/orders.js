@@ -36,6 +36,20 @@ class OrderManager {
   }
 
   /**
+   * Cancela um pedido
+   * @param {string|number} orderId - ID do pedido
+   * @returns {Promise<object>} - Resultado da operação
+   */
+  async cancelOrder(orderId) {
+    try {
+      const result = await this.apiService.cancelOrder(orderId);
+      return result;
+    } catch (error) {
+      throw new Error(`Erro ao cancelar pedido: ${error.message}`);
+    }
+  }
+
+  /**
    * Exibe o status do pedido na UI
    * @param {object} order - Dados do pedido
    * @param {HTMLElement} container - Container onde renderizar
@@ -150,6 +164,7 @@ class OrderManager {
             const itemCount = order.items
               ? order.items.reduce((sum, item) => sum + item.quantity, 0)
               : 0;
+            const isPending = order.status === "pending";
 
             return `
             <div class="order-history-item" data-order-id="${order.id}">
@@ -165,12 +180,67 @@ class OrderManager {
               order.total || 0
             ).toFixed(2)}</p>
               </div>
+              
+              ${
+                isPending
+                  ? `<div class="order-actions" style="margin-top: 10px; text-align: right;">
+                       <button class="btn btn-sm btn-delete" data-action="cancel" data-id="${order.id}">
+                         Cancelar Pedido
+                       </button>
+                     </div>`
+                  : ""
+              }
             </div>
           `;
           })
           .join("")}
       </div>
     `;
+
+    // Adiciona event listeners aos botões de cancelar
+    this.attachCancelEventListeners(container);
+  }
+
+  /**
+   * Adiciona event listeners aos botões de cancelar
+   * @param {HTMLElement} container - Container com os botões
+   */
+  attachCancelEventListeners(container) {
+    const cancelButtons = container.querySelectorAll('[data-action="cancel"]');
+
+    cancelButtons.forEach((button) => {
+      button.addEventListener("click", async (e) => {
+        const orderId = e.target.dataset.id;
+
+        // Confirmação do usuário
+        if (!confirm(`Deseja realmente cancelar o pedido #${orderId}?`)) {
+          return;
+        }
+
+        try {
+          // Desabilita o botão durante o processamento
+          button.disabled = true;
+          button.textContent = "Cancelando...";
+
+          // Cancela o pedido
+          await this.cancelOrder(orderId);
+
+          // Atualiza a lista de pedidos
+          const orders = await this.getOrderHistory();
+          this.displayOrderHistory(orders, container);
+
+          // Feedback de sucesso
+          alert(`Pedido #${orderId} cancelado com sucesso!`);
+        } catch (error) {
+          console.error("Erro ao cancelar pedido:", error);
+          alert(`Erro ao cancelar pedido: ${error.message}`);
+
+          // Reabilita o botão em caso de erro
+          button.disabled = false;
+          button.textContent = "Cancelar Pedido";
+        }
+      });
+    });
   }
 
   /**

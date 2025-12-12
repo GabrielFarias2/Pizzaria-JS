@@ -53,7 +53,7 @@ app.post("/api/orders", async (req, res) => {
     // (Caso o frontend envie formato diferente, mas pelo que vi no app.js, o api.js normaliza)
     // O app.js 'handleOrderFormSubmit' envia { items: [...], total, observations }
     // O app.js 'handleCartCheckout' envia { items: [...], total }
-    
+
     if (!items || !Array.isArray(items)) {
       return res.status(400).json({ message: "Dados do pedido inválidos" });
     }
