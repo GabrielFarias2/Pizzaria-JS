@@ -27,7 +27,10 @@ class ApiService {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `Erro HTTP: ${response.status}`);
+        console.error("Erro detalhado da API:", errorData); // Log full error object
+        const errorMessage = errorData.message || `Erro HTTP: ${response.status}`;
+        const detailedError = errorData.error ? ` | Detalhes: ${errorData.error}` : "";
+        throw new Error(errorMessage + detailedError);
       }
 
       return await response.json();
