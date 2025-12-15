@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # Serviço do Backend (Node.js)
+  api:
+    build: .
+    ports:
+      - "8081:8081"
+    environment:
+      - DATABASE_URL=postgresql://user:password@db:5432/pizzaria?schema=public
+      - PORT=8081
+      - NODE_ENV=production
+    depends_on:
+      - db
+    command: sh -c "npx prisma migrate deploy && npm start"
+    restart: always
+
+  # Serviço do Banco de Dados (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: pizzaria
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: always
+
+volumes:
+  postgres_data:

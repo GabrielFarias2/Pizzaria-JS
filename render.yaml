@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: pizza-backend
+    env: node
+    plan: free
+    buildCommand: npm ci && npx prisma generate
+    startCommand: npx prisma migrate deploy && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+    # Se você usar o Postgres gerenciado pelo Render (pago ou free trial limitado), descomente abaixo:
+    # - key: DATABASE_URL
+    #   fromDatabase:
+    #     name: pizzaria-db
+    #     property: connectionString
+
+# databases:
+#   - name: pizzaria-db
+#     plan: free
+#     databaseName: pizzaria
+#     user: user
+
+# Nota: O plano 'free' de banco de dados no Render expira após 30 dias.
+# Recomendação: Use um banco de dados externo (Neon, Supabase, ElephantSQL) ou o plano pago do Render para persistência real.
+# Se usar banco externo, adicione DATABASE_URL manualmente no Dashboard do Render.
