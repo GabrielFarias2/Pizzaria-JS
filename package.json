@@ -8,7 +8,7 @@
     "prisma": "^5.14.0"
   },
   "scripts": {
-    "start": "npx prisma migrate deploy && node backend/server.js",
+    "start": "npx prisma db push && node backend/server.js",
     "dev": "nodemon backend/server.js",
     "postinstall": "prisma generate"
   },
