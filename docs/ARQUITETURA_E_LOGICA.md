@@ -36,32 +36,7 @@ graph LR
 
 ---
 
-## 3. Entendendo a Estrutura de Pastas
-
-Aqui está a função de cada parte importante do projeto:
-
-```
-pizza.js-backend/
-├── backend/                  <- A "Cozinha" (Servidor)
-│   ├── server.js             <- O Chefe de Cozinha. Arquivo principal que liga o servidor.
-│   └── prisma/
-│       └── schema.prisma     <- O Cardápio do Banco de Dados. Define como os dados são guardados.
-│
-├── public/                   <- O "Salão" (Site visível ao público)
-│   ├── index.html            <- A estrutura das páginas.
-│   ├── style.css             <- A decoração (cores, fontes).
-│   └── src/                  <- Os Garçons (Scripts que fazem o site funcionar)
-│       ├── api.js            <- O Mensageiro. Faz as chamadas para o Backend.
-│       ├── app.js            <- O Gerente. Controla o site (modais, cliques, inicialização).
-│       ├── orders.js         <- Especialista em Pedidos. Cuida do histórico e status.
-│       └── cart.js           <- O Carrinho. Gerencia os itens que o usuário escolheu.
-│
-└── package.json              <- A Lista de Compras. Lista as dependências (bibliotecas) do projeto.
-```
-
----
-
-## 4. Mergulhando na Lógica (Como funciona?)
+## 3. Mergulhando na Lógica (Como funciona?)
 
 ### A. O Banco de Dados e Prisma (`schema.prisma`)
 O Prisma funciona como um tradutor. Em vez de escrevermos SQL complexo (`INSERT INTO orders...`), escrevemos código JavaScript simples.
@@ -103,7 +78,7 @@ O JavaScript do Frontend é dividido em classes para ficar organizado:
 
 ---
 
-## 5. Exemplo Prático: O Fluxo de um Pedido
+## 4. Exemplo Prático: O Fluxo de um Pedido
 
 Vamos rastrear o que acontece quando você clica em "Finalizar Pedido" no carrinho:
 
@@ -121,17 +96,3 @@ Vamos rastrear o que acontece quando você clica em "Finalizar Pedido" no carrin
 8.  **Atualização**: O `app.js` limpa o carrinho, fecha o modal e chama `loadOrderHistory()` para mostrar o novo pedido na lista.
 
 ---
-
-## 6. Dicas de Estudo
-
-Para aprender mais com esse projeto:
-
-1.  **Experimente quebrar o código**: Vá no `server.js` e mude uma rota. Veja o Frontend falhar e tente entender o erro no console do navegador (F12).
-2.  **Siga o rastro**: Pegue uma função como `cancelOrder`.
-    *   Veja onde ela é chamada no botão HTML.
-    *   Siga para o `orders.js`.
-    *   Siga para o `api.js`.
-    *   Siga para a rota no `server.js`.
-3.  **Use o `console.log`**: Espalhe logs pelo código para ver quando cada parte é executada.
-
-Este projeto foi feito para ser modular (peças separadas), o que facilita muito a manutenção e o entendimento. Bom estudo!
