@@ -81,7 +81,7 @@ app.post("/api/orders", async (req, res) => {
     res.json(newOrder);
   } catch (error) {
     console.error("Erro ao criar pedido:", error);
-    res.status(500).json({ message: "Erro ao criar pedido" });
+    res.status(500).json({ message: "Erro ao criar pedido", error: error.message, details: error.stack });
   }
 });
 
@@ -100,7 +100,7 @@ app.get("/api/orders/:id", async (req, res) => {
     }
   } catch (error) {
     console.error("Erro ao buscar pedido:", error);
-    res.status(500).json({ message: "Erro ao buscar pedido" });
+    res.status(500).json({ message: "Erro ao buscar pedido", error: error.message });
   }
 });
 
@@ -114,7 +114,7 @@ app.get("/api/orders", async (req, res) => {
     res.json(orders);
   } catch (error) {
     console.error("Erro ao buscar pedidos:", error);
-    res.status(500).json({ message: "Erro ao buscar pedidos" });
+    res.status(500).json({ message: "Erro ao buscar pedidos", error: error.message });
   }
 });
 
