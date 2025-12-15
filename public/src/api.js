@@ -2,7 +2,7 @@
  * ApiService - Classe para comunicação com a API do backend
  */
 class ApiService {
-  constructor(baseUrl = "http://localhost:8081/api") {
+  constructor(baseUrl = "/api") {
     this.baseUrl = baseUrl;
   }
 
